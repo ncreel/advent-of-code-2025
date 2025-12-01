@@ -58,6 +58,7 @@
 ## Analyze the rotations in your attached document. What's the actual password to open the door?
 import sys
 import re
+import math
 
 def method_one(position, filename):
   turn_regex = '^([RLrl]{1})([0-9]+)$'
@@ -77,7 +78,28 @@ def method_one(position, filename):
   return password
 
 def method_two(position, filename):
-   return 0
+  turn_regex = '^([RLrl]{1})([0-9]+)$'
+  raw_position = position
+  password = 0
+  with open(filename, 'r') as f:
+     for line in f:
+        current_line_val = re.search(turn_regex, line)
+        direction = current_line_val.group(1).upper()
+        value = int(current_line_val.group(2))
+        original_position = position
+        match direction:
+           case "L":
+              position = (position - value) % 100
+              raw_position = original_position - value
+           case "R":
+              position = (position + value) % 100
+              raw_position = original_position + value
+        print(f"original position: {original_position} position: {position} raw position: {raw_position} direction: {direction} value: {value}")
+        if raw_position > 99 or raw_position < 0:
+         password += math.ceil(abs(raw_position/100))
+         print(f"password updated: {password}")
+
+  return password
 
 def main():
    if len(sys.argv) < 2:
