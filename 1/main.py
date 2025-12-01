@@ -95,9 +95,12 @@ def method_two(position, filename):
               position = (position + value) % 100
               raw_position = original_position + value
         print(f"original position: {original_position} position: {position} raw position: {raw_position} direction: {direction} value: {value}")
-        if raw_position > 99 or raw_position < 0:
-         password += math.ceil(abs(raw_position/100))
+        if raw_position > 99:
+         password += math.floor(abs(raw_position/100))
          print(f"password updated: {password}")
+        if raw_position <= 0:
+           password += math.ceil(abs(raw_position/100))
+           print(f"password updated: {password}")
 
   return password
 
